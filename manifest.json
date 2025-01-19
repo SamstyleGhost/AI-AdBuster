@@ -16,7 +16,7 @@
   "content_scripts": [
     {
       "js": ["src/content.ts"],
-      "matches": ["https://www.irctc.co.in/nget/train-search", "https://www.w3schools.com/*"]
+      "matches": ["https://www.irctc.co.in/nget/train-search", "https://www.w3schools.com/*", "https://leetcode.com/*"]
     }
   ]
 }
