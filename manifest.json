@@ -4,25 +4,19 @@
   "version": "1.0",
   "description": "Monitor and optionally block requests made to ad servers.",
   "permissions": [
-    "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess"
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": [
     "*://*/*"
   ],
-  "background": {
-    "service_worker": "src/content.js"
-  },
   "action": {
     "default_popup": "index.html"
   },
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "adblock_rules",
-        "enabled": true,
-        "path": "src/rules.json"
-      }
-    ]
-  }
+  "content_scripts": [
+    {
+      "js": ["src/content.ts"],
+      "matches": ["https://www.irctc.co.in/nget/train-search", "https://www.w3schools.com/*"]
+    }
+  ]
 }

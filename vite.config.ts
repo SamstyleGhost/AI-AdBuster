@@ -7,13 +7,5 @@ export default defineConfig({
   plugins: [
     react(),
     crx({ manifest }),
-  ],
-  build: {
-    rollupOptions: {
-      input: {
-        background: "src/background.js",
-        content: "src/content.js"
-      }
-    }
-  }
+  ]
 })
