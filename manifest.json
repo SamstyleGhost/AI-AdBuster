@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Ad Request Monitor",
+  "version": "1.0",
+  "description": "Monitor and optionally block requests made to ad servers.",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "background": {
+    "service_worker": "src/content.js"
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "adblock_rules",
+        "enabled": true,
+        "path": "src/rules.json"
+      }
+    ]
+  }
+}
