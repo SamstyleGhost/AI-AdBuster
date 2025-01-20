@@ -5,7 +5,8 @@
   "description": "Monitor and optionally block requests made to ad servers.",
   "permissions": [
     "scripting",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "host_permissions": [
     "*://*/*"
@@ -16,7 +17,12 @@
   "content_scripts": [
     {
       "js": ["src/content.ts"],
-      "matches": ["https://www.irctc.co.in/nget/train-search", "https://www.w3schools.com/*", "https://leetcode.com/*"]
+      "matches": [
+        "https://www.irctc.co.in/nget/train-search",
+        "https://www.w3schools.com/*",
+        "https://leetcode.com/*",
+        "https://www.javatpoint.com/*"
+      ]
     }
   ]
 }

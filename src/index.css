@@ -1,3 +1,82 @@
-.setCustomBorderExtension {
-  border: 4px solid red;
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Quicksand:wght@300..700&display=swap');
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  width: 400px;
+  height: 500px;
+  overflow: hidden;
+  font-family: "Mountains of Christmas", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: aliceblue;
+}
+
+.bg_image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title > p {
+  font-size: 72px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.choice_title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.choice_title > p {
+  font-size: 16px;
+}
+
+.mode_choices_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.mode_choices_container > button {
+  all: unset;
+  cursor: pointer;
+  width: 40%;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  background: orangered;
+  border-radius: 4px;
+  padding: 4px 8px;
+  filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  border: 1px solid white;
+  transition: all 0.3s ease-in-out;
+}
+
+.mode_choices_container > button:hover {
+  transform: scale(1.2);
+}
+
+.mode_choices_container > .active_mode {
+  background: maroon;
 }

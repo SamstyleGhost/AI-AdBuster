@@ -1,13 +1,17 @@
-import { getAdDescription } from "./utils/utils";
+import { data, getReplacementContent } from "./utils/utils";
+import { getAdDescription } from "./utils/ai";
 
+// I'll provide random fun facts if I cannot get the advertisement
 
-const data : string[] = [
-  'div[data-google-query-id]:not([data-replaced="true"])',
-  'div[id^="google_ads_iframe"]:not([data-replaced="true"])',
-  'div[id^="_vdo_ads_player_ai"]:not([data-replaced="true"])',
-  'iframe[aria-label="Advertisement"]:not([data-replaced="true"])'
-]
-
+const setReplacementContentStyles = (element : HTMLDivElement) => {
+  element.style.width = "100%";
+  element.style.height = "inherit";
+  element.style.padding = "8px";
+  element.style.textAlign = "center";
+  element.style.display = "flex";
+  element.style.justifyContent = "center";
+  element.style.alignItems = "center";
+}
 
 const replaceAds = () => {
   const selectors = data.join(',');
@@ -17,11 +21,11 @@ const replaceAds = () => {
     element.setAttribute('data-replaced', 'true');
 
     const replacementContent = document.createElement('div');
-    replacementContent.innerHTML = `
-      <i class="icon-class">🔔</i>
-      <span>Loading description...</span>
-    `;
+    replacementContent.setAttribute('data-replaced', 'true');
+    replacementContent.setAttribute('aria-hidden', "true")
+    setReplacementContentStyles(replacementContent)
 
+    replacementContent.innerHTML = getReplacementContent("Sorry! No description.")
     let adDescription = "Sorry! no description";
 
     if (element.tagName !== "IFRAME") {
@@ -38,52 +42,70 @@ const replaceAds = () => {
                 console.log("Ad description is:", res);
                 adDescription = res;
 
-                replacementContent.innerHTML = `
-                  <i class="icon-class">🔔</i>
-                  <span>${adDescription}</span>
-                `;
+                replacementContent.innerHTML = getReplacementContent(adDescription)
               })
               .catch((err) => {
                 console.error('Error fetching ad description:', err);
-                replacementContent.innerHTML = `
-                  <i class="icon-class">🔔</i>
-                  <span>Sorry! no description</span>
-                `;
+                replacementContent.innerHTML = getReplacementContent("Sorry! No description!")
               });
           }
         } catch (error) {
           console.error('Error accessing iframe content:', error);
-          replacementContent.innerHTML = `
-            <i class="icon-class">🔔</i>
-            <span>Sorry! no description</span>
-          `;
+          replacementContent.innerHTML = getReplacementContent("Sorry! No description.")        
         }
       }
     }
 
     const imageEle = element.querySelector('img');
     if (imageEle) {
-      console.log(imageEle.src);
+      console.log("Image found inside non-iframe elements: ", imageEle.src);
     } else {
-      replacementContent.innerHTML = `
-        <i class="icon-class">🔔</i>
-        <span>Sorry! no description</span>
-      `;
+      replacementContent.innerHTML = getReplacementContent("Sorry! No description.")
     }
 
     element.replaceWith(replacementContent);
   });
 };
 
-const removeAds = () => {
-  const selectors = data.join(',')
-  const elements = document.querySelectorAll(selectors);
+const convertToVampire = () => {
+  const elements : NodeListOf<HTMLDivElement> = document.querySelectorAll('div[data-replaced="true"]');
   elements.forEach(element => {
-    element.remove()
+    setReplacementContentStyles(element)
+    element.style.filter = "grayscale(100%)";
+  })
+}
+const convertToExorcism = () => {
+  const elements = document.querySelectorAll('div[data-replaced="true"]');
+  elements.forEach(element => {
+    element.setAttribute('style', 'display: none;')
   })
 }
 
-const observer = new MutationObserver(replaceAds);
+const convertToDefault = () => {
+  const elements : NodeListOf<HTMLDivElement> = document.querySelectorAll('div[data-replaced="true"]');
+  elements.forEach(element => {
+    setReplacementContentStyles(element);
+    element.style.filter = "grayscale(0%)";
+  })
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "changeMode") {
+    console.log(`Mode changed to: ${message.mode}`);
+    if(message.mode === "exorcism") {
+      convertToExorcism();
+    } else if(message.mode === "vampire") {
+      convertToVampire();
+    } else {
+      convertToDefault()
+    }
+    sendResponse({ success: true });
+  }
+});
+
+const observer = new MutationObserver(() => {
+  replaceAds()
+});
 observer.observe(document.body, { childList: true, subtree: true });
 
 // import { checkAds } from "./utils/utils";
