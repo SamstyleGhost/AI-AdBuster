@@ -6,7 +6,9 @@ import cors from "cors";
 import { handleGeminiCall, handleGroqCall, handleOpenAICall } from "./handlers/handlers.js";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 
 app.post("/api/groq", async (req, res) => {
@@ -60,6 +62,7 @@ app.post("/api/gemini", async (req, res) => {
   }
 });
 
+// Using port 3000 as 5000 is getting intercepted by pubmatic ads
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);

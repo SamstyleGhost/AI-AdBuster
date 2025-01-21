@@ -38,6 +38,7 @@ export const handleGroqCall = async (url) => {
     if(groqResponse === null) {
       throw new Error("Error")
     }
+    console.log(groqResponse)
     return groqResponse; 
   } catch (error) {
     console.error(error)

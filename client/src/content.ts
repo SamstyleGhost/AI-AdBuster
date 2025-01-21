@@ -1,8 +1,7 @@
 import { convertToDefault, convertToExorcism, convertToVampire, data, getReplacementContent, iframedata, setReplacementContentStyles } from "./utils/utils";
 import { getAdDescription } from "./utils/ai";
 
-// I'll provide random fun facts if I cannot get the advertisement
-
+// When the user clicks on changing the modes, it will send a signal here which will change the styling of the elements
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "changeMode") {
     console.log(`Mode changed to: ${message.mode}`);
@@ -17,6 +16,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+// Since mostly, advertisements are embedded through an iframe, checking these separately
 const checkIframes = () => {
   const selectors = iframedata.join(',')
   const iframes = document.querySelectorAll<HTMLIFrameElement>(selectors);
@@ -51,13 +51,14 @@ const checkIframes = () => {
       console.error(`Error accessing iframe with ID: `,iframe.id, error);
     }
     
-    // Helps with the spacing
+    // Helps with the spacing and the empty gap that would be present when the initial element is removed
     const parentElement = iframe.parentElement;
     if(parentElement && parentElement.id.startsWith('google_ads_iframe_')) parentElement.replaceWith(replacementContent);
     else iframe.replaceWith(replacementContent);
   });
 }
 
+// Checking any other elements that match the known selectors
 const checkDivs = () => {
   const selectors = data.join(',');
   const elements = document.querySelectorAll<HTMLDivElement>(selectors)
@@ -77,5 +78,6 @@ const replaceAds = () => {
   checkDivs()
 }
 
+// Would react to DOM changes since advertisements are embedded dynamically onto the websites
 const observer = new MutationObserver(replaceAds);
 observer.observe(document.body, { childList: true, subtree: true });

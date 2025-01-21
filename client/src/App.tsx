@@ -9,6 +9,7 @@ function App() {
   const [selectedMode, setSelectedMode] = useState<Mode>("default");
   const [selectedModel, setSelectedModel] = useState<Model>("llama");
 
+  // Sends a signal when the mode is changed
   const sendModeChange = (mode: Mode) => {
     chrome.tabs.query({ currentWindow: true }, (tabs) => {
       tabs.forEach(tab => {
@@ -19,6 +20,7 @@ function App() {
     })
   }
   
+  // Local storage is integrated to maintain persistence across sessions as well as across multiple tabs
   const handleChange = (mode : Mode) => {
     chrome.storage.local.set({ aiadbustermode: mode }, () => {
       console.log("aiadbustermode mode saved: ", mode)
@@ -34,6 +36,7 @@ function App() {
     setSelectedModel(model);
   }
 
+  // I am changing backgrounds when mode changes
   const getBackgroundImage = () => {
     if(selectedMode === "default") return normal;
     else if(selectedMode === "exorcism") return exorcism;
@@ -41,6 +44,7 @@ function App() {
     else return "";
   }
   
+  // Maintaining consistency in frontend
   useEffect(() => {
     chrome.storage.local.get("aiadbustermode", (result) => {
       if (result.aiadbustermode !== "default") {

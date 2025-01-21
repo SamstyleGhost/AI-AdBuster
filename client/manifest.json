@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Ad Request Monitor",
+  "name": "AI AdBuster",
   "version": "1.0",
-  "description": "Monitor and optionally block requests made to ad servers.",
+  "description": "Turn ads hallowweennyy!!",
   "permissions": [
     "scripting",
     "activeTab",
