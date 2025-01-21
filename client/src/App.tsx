@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { exorcism, normal, vampire } from "./assets"
 
 type Mode = "default" | "exorcism" | "vampire"
@@ -8,14 +8,19 @@ function App() {
   const [selectedMode, setSelectedMode] = useState<Mode>("default")
 
   const sendModeChange = (mode: Mode) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if(tabs[0].id !== undefined) {
-        chrome.tabs.sendMessage(tabs[0].id, { type: "changeMode", mode: mode })
-      }
+    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+      tabs.forEach(tab => {
+        if(tab.id !== undefined) {
+          chrome.tabs.sendMessage(tab.id, { type: "changeMode", mode: mode })
+        }
+      })
     })
   }
   
   const handleChange = (mode : Mode) => {
+    chrome.storage.local.set({ aiadbustermode: mode }, () => {
+      console.log("aiadbustermode mode saved: ", mode)
+    })
     setSelectedMode(mode)
     sendModeChange(mode)
   }
@@ -26,6 +31,15 @@ function App() {
     else if(selectedMode === "vampire") return vampire;
     else return "";
   }
+  
+  useEffect(() => {
+    chrome.storage.local.get("aiadbustermode", (result) => {
+      if (result.aiadbustermode !== "default") {
+        setSelectedMode(result.aiadbustermode)
+        sendModeChange(result.aiadbustermode);
+      }
+    });
+  }, [])
 
   return (
     <main>
