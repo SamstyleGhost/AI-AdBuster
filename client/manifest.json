@@ -17,13 +17,10 @@
   },
   "content_scripts": [
     {
-      "js": ["src/content.ts"],
-      "matches": [
-        "https://www.irctc.co.in/nget/train-search",
-        "https://www.w3schools.com/*",
-        "https://leetcode.com/*",
-        "https://www.javatpoint.com/*"
-      ]
+      "js": [
+        "src/content.ts"
+      ],
+      "matches": ["<all_urls>"]
     }
   ]
 }
