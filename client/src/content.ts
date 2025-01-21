@@ -1,5 +1,5 @@
 import { convertToDefault, convertToExorcism, convertToVampire, data, getReplacementContent, iframedata, setReplacementContentStyles } from "./utils/utils";
-import { checkAds } from "./utils/ai";
+import { getAdDescription } from "./utils/ai";
 
 // I'll provide random fun facts if I cannot get the advertisement
 
@@ -35,7 +35,7 @@ const checkIframes = () => {
         const image = iframeDoc.querySelector<HTMLImageElement>('img');
         if(image) {
           console.log(`Iframe ID: ${iframe.id}, src: ${image.src}`);
-            checkAds(image.src)
+            getAdDescription(image.src)
             .then((res) => {
               replacementContent.innerHTML = getReplacementContent(res)
             })
@@ -48,7 +48,7 @@ const checkIframes = () => {
         console.error(`Could not access document of iframe with ID: ${iframe.id}`);
       }
     } catch (error) {
-      console.error(`Error accessing iframe with ID: ${iframe.id}`, error);
+      console.error(`Error accessing iframe with ID: `,iframe.id, error);
     }
     
     // Helps with the spacing

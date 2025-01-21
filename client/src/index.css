@@ -8,7 +8,7 @@ body {
 
 main {
   width: 400px;
-  height: 500px;
+  height: 600px;
   overflow: hidden;
   font-family: "Mountains of Christmas", serif;
   font-weight: 400;
@@ -46,6 +46,7 @@ main {
 
 .choice_title > p {
   font-size: 16px;
+  mix-blend-mode: difference;
 }
 
 .mode_choices_container {
@@ -79,4 +80,39 @@ main {
 
 .mode_choices_container > .active_mode {
   background: maroon;
+}
+
+.llm_choices_container {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.llm_choices_container > button {
+  all: unset;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 400;
+  text-align: center;
+  background: green;
+  color: black;
+  border-radius: 4px;
+  padding: 4px 8px;
+  filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  border: 1px solid black;
+  transition: all 0.3s ease-in-out;
+}
+
+.llm_choices_container > button:hover {
+  transform: scale(1.2);
+}
+
+.llm_choices_container > .active_model {
+  background: limegreen;
+}
+
+.added_margin {
+  margin-top: 20px;
 }

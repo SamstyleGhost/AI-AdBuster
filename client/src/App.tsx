@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { exorcism, normal, vampire } from "./assets"
 
-type Mode = "default" | "exorcism" | "vampire"
+type Mode = "default" | "exorcism" | "vampire";
+type Model = "llama" | "openai" | "gemini";
 
 function App() {
   
-  const [selectedMode, setSelectedMode] = useState<Mode>("default")
+  const [selectedMode, setSelectedMode] = useState<Mode>("default");
+  const [selectedModel, setSelectedModel] = useState<Model>("llama");
 
   const sendModeChange = (mode: Mode) => {
     chrome.tabs.query({ currentWindow: true }, (tabs) => {
@@ -24,6 +26,13 @@ function App() {
     setSelectedMode(mode)
     sendModeChange(mode)
   }
+  
+  const handleModelChange = (model : Model) => {
+    chrome.storage.local.set({ aiadbusterllm: model }, () => {
+      console.log("aiadbusterllm model saved: ", model)
+    })
+    setSelectedModel(model);
+  }
 
   const getBackgroundImage = () => {
     if(selectedMode === "default") return normal;
@@ -40,6 +49,14 @@ function App() {
       }
     });
   }, [])
+  
+  useEffect(() => {
+    chrome.storage.local.get("aiadbusterllm", (result) => {
+      if (result.aiadbusterllm !== "llama") {
+        setSelectedModel(result.aiadbusterllm)
+      }
+    });
+  }, [])
 
   return (
     <main>
@@ -53,6 +70,14 @@ function App() {
       <div className="mode_choices_container">
         {["default", "vampire", "exorcism"].map(mode => (
           <button key={mode} onClick={() => handleChange(mode as Mode)} className={`${mode === selectedMode && "active_mode"}`}>{mode.charAt(0).toUpperCase() + mode.slice(1)}</button>
+        ))}
+      </div>
+      <div className="choice_title added_margin">
+        <p>Choose your LLM:</p>
+      </div>
+      <div className="llm_choices_container">
+        {["llama", "openai", "gemini"].map(model => (
+          <button key={model} onClick={() => handleModelChange(model as Model)} className={`${model === selectedModel && "active_model"}`}>{model.charAt(0).toUpperCase() + model.slice(1)}</button>
         ))}
       </div>
     </main>

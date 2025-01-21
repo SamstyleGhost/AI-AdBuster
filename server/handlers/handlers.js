@@ -26,7 +26,7 @@ export const handleGroqCall = async (url) => {
           ]
         }
       ],
-      model: "llama-3.2-90b-vision-preview",
+      model: "llama-3.2-11b-vision-preview",
       temperature: 0.8,
       max_tokens: 1024,
       top_p: 1,
@@ -110,7 +110,7 @@ export const handleGeminiCall = async (url) => {
       show_original_response: false,
       temperature: 0.9,
       max_tokens: 200,
-      providers: ['openai'],
+      providers: ['google'],
       file_url: url,
       question: prompt
     }
